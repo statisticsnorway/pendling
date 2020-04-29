@@ -5,7 +5,6 @@ options(encoding="utf-8")
 library(PxWebApiData) # For collecting in data from statbank
 library(shiny)
 library(leaflet)
-library(leaflet.extras)
 library(dplyr)
 library(htmlwidgets)
 library(ggplot2)     # for plotting
