@@ -111,7 +111,7 @@ server <- function(input, output, session){
     leaflet(data = geodata$komm_shape) %>%
       addProviderTiles(providers$CartoDB.Voyager,
                        options = providerTileOptions(opacity = 0.4)) %>%  
-      addMiniMap(tiles = providers$OpenStreeMap.Mapnik,
+      addMiniMap(tiles = providers$CartoDB.Voyager,
                  toggleDisplay = TRUE,
                  width = 80, height = 100,
                  zoomLevelFixed = 2) %>%
@@ -124,9 +124,9 @@ server <- function(input, output, session){
   # Spesifications for base map - arbeidssted
   output$map_arb <- renderLeaflet({
     leaflet(data = geodata$komm_shape) %>%
-      addProviderTiles(providers$OpenStreetMap.HOT,
+      addProviderTiles(providers$CartoDB.Voyager,
                        options = providerTileOptions(opacity = 0.4)) %>%  
-      addMiniMap(tiles = providers$OpenStreeMap.Mapnik,
+      addMiniMap(tiles = providers$CartoDB.Voyager,
                  toggleDisplay = TRUE,
                  width = 80, height = 100,
                  zoomLevelFixed = 2) %>%
