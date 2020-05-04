@@ -109,7 +109,7 @@ server <- function(input, output, session){
   # Spesifications for base map - bosted
   output$map <- renderLeaflet({
     leaflet(data = geodata$komm_shape) %>%
-      addProviderTiles(providers$OpenStreetMap.HOT,
+      addProviderTiles(providers$CartoDB.Voyager,
                        options = providerTileOptions(opacity = 0.4)) %>%  
       addMiniMap(tiles = providers$OpenStreeMap.Mapnik,
                  toggleDisplay = TRUE,
