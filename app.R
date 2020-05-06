@@ -98,8 +98,11 @@ ui <- dashboardPage(
 server <- function(input, output, session){
   
   # Set up reactive values
-  data_of_click <- reactiveValues(clickedMarker = NULL) # For clicked kommune - bosted
-  data_of_click_arb <- reactiveValues(clickedMarker = NULL) # For clicked kommune - arbsted
+  #data_of_click <- reactiveValues(clickedMarker = NULL) # For clicked kommune - bosted
+  data_of_click <- reactiveValues(clickedMarker = list(id="0301")) # For clicked kommune - bosted
+
+  #data_of_click_arb <- reactiveValues(clickedMarker = NULL) # For clicked kommune - arbsted
+  data_of_click_arb <- reactiveValues(clickedMarker = list(id="0301")) # For clicked kommune - arbsted
   geodata <- reactiveValues(komm_shape = NULL)    # For kommune boundary polygons
   geodata <- reactiveValues(komm_punkt = NULL)    # For kommune center points (with data attached)
   statdata <- reactiveValues()                    # For the statistical data values
@@ -108,6 +111,7 @@ server <- function(input, output, session){
     
   # Spesifications for base map - bosted
   output$map <- renderLeaflet({
+    shiny::validate(need(geodata$komm_shape, "Please select a year"))
     leaflet(data = geodata$komm_shape) %>%
       addProviderTiles(providers$CartoDB.Voyager,
                        options = providerTileOptions(opacity = 0.4)) %>%  
@@ -115,7 +119,7 @@ server <- function(input, output, session){
                  toggleDisplay = TRUE,
                  width = 80, height = 100,
                  zoomLevelFixed = 2) %>%
-      setView(lng=11.00, lat=59.50, zoom = 9) %>%
+      setView(lng=18, lat=66, zoom = 4) %>%
       addLegend(position=c("topright"), colors=c("#83C1E9","#006CB6", "#F16539"), 
                 labels=c("Befolkningen 15-74 år", "Syssesatte personer i kommunen", "Sysselsattes arbeidssted"),
                 opacity = 0.6)
@@ -123,6 +127,7 @@ server <- function(input, output, session){
   
   # Spesifications for base map - arbeidssted
   output$map_arb <- renderLeaflet({
+    shiny::validate(need(geodata$komm_shape, "Please select a year"))
     leaflet(data = geodata$komm_shape) %>%
       addProviderTiles(providers$CartoDB.Voyager,
                        options = providerTileOptions(opacity = 0.4)) %>%  
@@ -130,7 +135,7 @@ server <- function(input, output, session){
                  toggleDisplay = TRUE,
                  width = 80, height = 100,
                  zoomLevelFixed = 2) %>%
-      setView(lng=11.00, lat=59.50, zoom = 9) %>%
+      setView(lng=18, lat=66, zoom = 4) %>%
       addLegend(position=c("topright"), colors=c("#F16539","#006CB6"), 
                 labels=c("Syssesatte personer i kommunen", "Sysselsattes bosted"),
                 opacity = 0.6)
@@ -202,6 +207,7 @@ server <- function(input, output, session){
   
   # Create event for text input of kommune name with flyTo
   observeEvent(input$kommuneid, {
+    validate(need(input$kommuneid, "Velg en kommune"))
     name <- input$kommuneid
     
     #bosted
@@ -287,6 +293,7 @@ server <- function(input, output, session){
   
   # Create dynamic plot - bosted
   output$plot <- renderPlot({
+    validate(need(data_of_click$clickedMarker, "Velg en kommune"))
     kommid <- data_of_click$clickedMarker$id #Numeric
     if (length(kommid) == 0){ plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
       if (is.na(kommid)) { plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
@@ -297,6 +304,7 @@ server <- function(input, output, session){
   
   # Create dynamic plot - arbsted
   output$plot_arb <- renderPlot({
+    validate(need(data_of_click_arb$clickedMarker, "Velg en kommune"))
     kommid <- data_of_click_arb$clickedMarker$id #Numeric
     if (length(kommid) == 0){ plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
       if (is.na(kommid)) { plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
