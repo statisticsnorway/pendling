@@ -2,15 +2,15 @@
 # the 'Run App' button above.
 options(encoding="utf-8")
 
-library(PxWebApiData) # For collecting in data from statbank
-library(shiny)
-library(leaflet)
-library(dplyr)
-library(htmlwidgets)
-library(ggplot2)     # for plotting
-library(grDevices)   # for windowsFont function
-library(stringr)
-library(shinydashboard)
+suppressMessages(library(shiny))
+suppressMessages(library(PxWebApiData)) # For collecting in data from statbank
+suppressMessages(library(leaflet))
+suppressMessages(library(dplyr))
+suppressMessages(library(htmlwidgets))
+suppressMessages(library(ggplot2))     # for plotting
+suppressMessages(library(grDevices))   # for windowsFont function
+suppressMessages(library(stringr))
+suppressMessages(library(shinydashboard))
 source("Dotmap_Functions.R")
 
 
