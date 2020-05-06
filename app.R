@@ -207,14 +207,18 @@ server <- function(input, output, session){
     #bosted
     data_of_click$clickedMarker$id <- geodata$komm_shape$NR[match(name, geodata$komm_shape$NAVN)]
     selectedKomm <- geodata$komm_punkt[geodata$komm_punkt$NR == data_of_click$clickedMarker$id, ]
+    if (!is.null(selectedKomm)){
     leafletProxy("map") %>%
       flyTo(lng = selectedKomm$lng, lat = selectedKomm$lat, zoom = 9)
+    }
     
     #arbsted
     data_of_click_arb$clickedMarker$id <- geodata$komm_shape$NR[match(name, geodata$komm_shape$NAVN)]
     selectedKomm <- geodata$komm_punkt[geodata$komm_punkt$NR == data_of_click_arb$clickedMarker$id, ]
-    leafletProxy("map_arb") %>%
+    if (!is.null(selectedKomm)){
+        leafletProxy("map_arb") %>%
       flyTo(lng = selectedKomm$lng, lat = selectedKomm$lat, zoom = 9)
+    }
   })
   
   # Create event for click of reset button
