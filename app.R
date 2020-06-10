@@ -53,6 +53,7 @@ ui <- dashboardPage(
     br(),
     br(),
     br(),
+    br(),
     HTML('<left><img src="ssb-logo.png", width = "200"></left>')
   ),
     
@@ -64,7 +65,10 @@ ui <- dashboardPage(
       id = "display_panel",
       tabPanel("Bosted",
                column(8,
-                      leafletOutput("map", height = 500)),
+                      leafletOutput("map", height = 500),
+                      uiOutput("tabell_link1a"),
+                      uiOutput("tabell_link1b")
+                      ),
                       
                 # Placement and spec. for the plot on right
                 column(4, offset = 0, style='padding:0px;',
@@ -76,7 +80,10 @@ ui <- dashboardPage(
                       
       tabPanel("Arbeidssted", 
                column(8,
-                      leafletOutput("map_arb", height = 500)),
+                      leafletOutput("map_arb", height = 500),
+                      uiOutput("tabell_link2a"),
+                      uiOutput("tabell_link2b")
+                      ),
                
                # Placement and spec. for the plot on right
                column(4, offset = 0, style='padding:0px;',
@@ -121,7 +128,7 @@ server <- function(input, output, session){
                  zoomLevelFixed = 2) %>%
       setView(lng=18, lat=66, zoom = 4) %>%
       addLegend(position=c("topright"), colors=c("#83C1E9","#006CB6", "#F16539"), 
-                labels=c("Befolkningen 15-74 år", "Syssesatte personer i kommunen", "Sysselsattes arbeidssted"),
+                labels=c("Befolkningen 15-74 år", "Sysselsatte personer i kommunen", "Sysselsattes arbeidssted"),
                 opacity = 0.6)
   })
   
@@ -137,9 +144,31 @@ server <- function(input, output, session){
                  zoomLevelFixed = 2) %>%
       setView(lng=18, lat=66, zoom = 4) %>%
       addLegend(position=c("topright"), colors=c("#F16539","#006CB6"), 
-                labels=c("Syssesatte personer i kommunen", "Sysselsattes bosted"),
+                labels=c("Sysselsatte personer i kommunen", "Sysselsattes bosted"),
                 opacity = 0.6)
   })
+  
+  #Specify text to statbank tables and article text
+  url_artikkel <- a("Hvor mye pendling er det mellom kommuner?",
+                    target="_blank",
+                    href = "https://www.ssb.no/arbeid-og-lonn/artikler-og-publikasjoner/hvor-mye-pendling-er-det-mellom-kommuner")
+  url_statbank <- a("statistikkbanktabell 03321.",
+                    target="_blank",
+                    href = "https://www.ssb.no/statbank/table/03321/")
+  
+  output$tabell_link1a <- renderUI({
+    tagList(url_artikkel)
+  })
+    output$tabell_link1b <- renderUI({
+      tagList("Tallene er hentet fra", url_statbank)
+    })
+    
+    output$tabell_link2a <- renderUI({
+      tagList(url_artikkel)
+    })
+    output$tabell_link2b <- renderUI({
+      tagList("Tallene er hentet fra", url_statbank)
+    })
 
   
   # Reload new kommune boundaries file when year is change, update kommune name choices
