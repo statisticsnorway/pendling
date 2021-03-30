@@ -3,7 +3,7 @@
 options(encoding="utf-8")
 
 suppressMessages(library(shiny))
-suppressMessages(library(PxWebApiData)) # For collecting in data from statbank
+#suppressMessages(library(PxWebApiData)) # For collecting in data from statbank
 suppressMessages(library(leaflet))
 suppressMessages(library(dplyr))
 suppressMessages(library(htmlwidgets))
@@ -18,7 +18,8 @@ source("Dotmap_Functions.R")
 adjA <- 13000 # Factor for circle size adjustment
 adjL <- 100   # Factor for line size 
 antkom <- 20  # Number of possible connections
-years_all <- c("2017", "2018", "2019") # Possible selectable years
+years_all <- c("2017", "2018", "2019", "2020") # Possible selectable years
+
 circ_size <- list("Liten" = 16000, "Middels" = 24000, "Stor" = 64000)
 
 # set intial kommune values for choices to NULL
@@ -325,7 +326,7 @@ server <- function(input, output, session){
     validate(need(data_of_click$clickedMarker, "Velg en kommune"))
     kommid <- data_of_click$clickedMarker$id #Numeric
     if (length(kommid) == 0){ plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
-      if (is.na(kommid)) { plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
+      if (is.na(kommid) | kommid == "line") { plot(1, type="n", axes = F, xlab = "", ylab = "")} else {
         Make_barplot(kommid, n = as.numeric(input$n), geodata$komm_shape, statdata$pend, antkom = antkom)
       }
     }
@@ -348,12 +349,11 @@ server <- function(input, output, session){
     kommid <- as.character(data_of_click$clickedMarker$id)
 
     if (length(kommid) > 0) {  # check if not null 
-      if (!is.na(kommid)) {    # check if not missing
+      if (!is.na(kommid) & kommid != "line") {    # check if not missing or on line
         outdata <- Filter_data(kommid, n = input$n, adjA = as.numeric(input$adjA), scaleLine = FALSE, 
                                komm_punkt=geodata$komm_punkt, pend=statdata$pend, 
                                pop11=statdata$pop11, befolk=statdata$befolk, 
                                arbb=statdata$arbb)
-        # outdata <- Filter_data("0101", n = 5, adjA = 24000, scaleLine =FALSE, komm_punkt=komm_punkt2018, pend=pend, pop11=pop11, befolk=befolk, arbb=arbb) #for testing
         selectedKomm <- outdata[[2]][1,]
         selectedShape <- geodata$komm_shape[geodata$komm_shape$KOMM == kommid, ]
         topShape <- geodata$komm_shape[geodata$komm_shape$KOMM %in% outdata[[1]]$KOMM, ]
@@ -366,7 +366,6 @@ server <- function(input, output, session){
           
         # Add population for chosen circle - dark blue
         addCircles(data = selectedKomm, lat = ~lat, lng=~lng, 
-    #               radius = circdata$pop1[as.numeric(geodata$komm_punkt$KOMM[statdata$mat_pop]) == as.numeric(kommid)], 
                     radius = circdata$pop1[as.numeric(circdata$Region) == as.numeric(kommid)], 
     
                     stroke = F, color = "#83C1E9", fillOpacity = 0.5, 
@@ -412,14 +411,13 @@ server <- function(input, output, session){
     kommid <- as.character(data_of_click_arb$clickedMarker$id)
     
     if (length(kommid) > 0) {  # check if not null 
-      if (!is.na(kommid)) {    # check if not missing
+      if (!is.na(kommid) & kommid != "line") {    # check if not missing
         outdata <- Filter_data_arb(kommid, n = input$n, 
                                    adjA = as.numeric(input$adjA), 
                                    scaleLine = FALSE, 
                                    komm_punkt=geodata$komm_punkt, 
                                    pend=statdata$pend, 
                                    pop_arb=statdata$arbb)
-        # outdata <- Filter_data_arb("0101", n = 5, adjA = 24000, scaleLine =FALSE, komm_punkt=komm_punkt2018, pend=pend, pop_arb=arbb) #for testing
         selectedKomm <- outdata[[2]][1,]
         selectedShape <- geodata$komm_shape[geodata$komm_shape$KOMM == kommid, ]
         topShape <- geodata$komm_shape[geodata$komm_shape$KOMM %in% outdata[[1]]$KOMM, ]
