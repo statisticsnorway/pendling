@@ -10,7 +10,6 @@ library(sp)
 #'@param komm_var The municipality variable as a text string
 #'@return A data frame containing only municipalities with location points on the mainland
 Make_kommune <- function(data, komm_var, komm_punkt){
-  # data_new <- data[data[, komm_var] %in% Komm_names$Komm, ]  #sjekk for kommune navn
   data_new <- data[data[, komm_var] %in% komm_punkt$NR, ]  # sjekk for kommune XY punkt
   return(data_new)
 }
@@ -127,7 +126,7 @@ Make_barplot <- function(zip, n, komm_shape, pend, antkom, scaleLine = FALSE){
   n <- min(n, nrow(dat)) # check there is enough data for n
   topKom <- dat[order(-dat$value),][1:(n+1),]
   topKom$NAVN <- komm_shape$NAVN[match(topKom$ArbstedKomm, komm_shape$NR)]
-  # par(mar = c(4,7,1,1))
+
   selected_navn <- topKom$NAVN[topKom$ArbstedKomm == zip]
     
   # max number of bars in barplot
