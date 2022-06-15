@@ -8,6 +8,7 @@
 #### 1. Setup ####
 # Load library for SSBs API
 library(PxWebApiData)
+library(rgdal)
 library(sf)
 library(sp)
 library(lubridate)
@@ -16,7 +17,7 @@ library(lubridate)
 source("Dotmap_Functions.R")
 
 # Specify which years to create data for
-years_all = "2020"
+years_all = "2021"
 
 
 
@@ -49,10 +50,10 @@ change_duplicates <- function(komm_punkt, year){
 # funksjon for å lagre kommunegrenser spatial polygon datasett i R
 shapeConverter <- function(year){
   yearfil <- year
-  filnavn <- paste0("S:/Faglig/Kommunikasjon/Publisering/Kart/GISkartgrunnlag/Illustrasjonskart", yearfil, ".gdb")
+  filnavn <- paste0("S:/Faglig/Kommunikasjon/Publisering/Kart/GISkartgrunnlag/_OLD/Illustrasjonskart", yearfil, ".gdb")
   while (!file.exists(filnavn) & yearfil <= year(today()) + 1){
     yearfil <- as.numeric(yearfil) + 1
-    filnavn <- paste0("S:/Faglig/Kommunikasjon/Publisering/Kart/GISkartgrunnlag/Illustrasjonskart", yearfil, ".gdb")
+    filnavn <- paste0("S:/Faglig/Kommunikasjon/Publisering/Kart/GISkartgrunnlag/_OLD/Illustrasjonskart", yearfil, ".gdb")
   }
   if (!file.exists(filnavn)) stop("No kommune map file found")
   laynavn <- paste0("N5000_kommune_flate_", yearfil)
@@ -93,11 +94,11 @@ for (y in years_all){
   shapeConverter(y)
 }
 
-
 #### 3. Create data for pendling numbers and population numbers ####
 for (y in years_all){
   
   # Make and save kommune (population) dataset
+  load(paste0("data/komm_punkt", y, ".RData"))
   komm_punkt <- get(paste0("komm_punkt", y))
   data_kommune <- ApiData(url = "https://data.ssb.no/api/v0/no/table/11618/"
                           , Region = TRUE, Kjonn = "0", Tid = y, Alder = "15-74",

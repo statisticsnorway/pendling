@@ -240,14 +240,13 @@ Make_barplot_arb <- function(zip, n, komm_shape, pend, antkom, scaleLine = FALSE
 #'@param zip A character variable for chosen municipality (4 digits)
 #'@param n The number of of municipalities to show
 #'@param adjA Adjustment factor
-#'@return Returns a list of 6 elements...
-
+#'@return Returns a list of 6 elements
 Filter_data <- function(zip, n, adjA, scaleLine =FALSE, komm_punkt, pend, pop11, befolk, arbb){
   zip <- formatC(zip, width = 4, flag = "0")
   # Filter data til valgt kommune
   dat <- pend[pend$Bokommuen == zip & pend$value > 0, ]
 
-  # Finn hvilken rad det gjelder valgt kommune som også er bosted
+  # Finn hvilken rad det gjelder valgt kommune som ogsaa er bosted
   mat_komm <- match(zip, dat$ArbstedKomm)
   
   # Finn hvilken rad i kommune punkt data til valgt kommune
@@ -261,7 +260,7 @@ Filter_data <- function(zip, n, adjA, scaleLine =FALSE, komm_punkt, pend, pop11,
     topKom <- c(zip, topKom)[1:n+1]
   }
   
-  # sett valgt kommune øverst
+  # sett valgt kommune oeverst
   if (match(zip, topKom) != 1){
     m <- match(zip, topKom)
     topKom <- topKom[c(m, seq(1, n+1)[-m])]
@@ -282,11 +281,11 @@ Filter_data <- function(zip, n, adjA, scaleLine =FALSE, komm_punkt, pend, pop11,
   group <- rep(c("A", "B"), n)
   mylines <- data.frame(group = group, lat = lat, lng = lng, type = "line")
   
-  # sett bredde på linje (dette er fast akkurat nå)
+  # sett bredde paa linje (dette er fast akkurat naa)
   ww <- pmax(dat$value[mat_arb]/sum(dat$value[mat_arb]), 0.01) #bredde av linje
   if (scaleLine == FALSE) {ww <- rep(0.02, n)}
   
-  # sirkel størrelsen til sysselsatte som bor på valgt kommune
+  # sirkel stoerrelsen til sysselsatte som bor paa valgt kommune
   pop4 <- sqrt(dat$value[mat_arb]/max(befolk$value)) * adjA
   
   mat_tot_punkt <- match(topKom[2:(n+1)], komm_punkt$NR)
@@ -307,7 +306,7 @@ Filter_data_arb <- function(zip, n, adjA, scaleLine = FALSE, komm_punkt, pend, p
   # Filter data til valgt kommune
   dat <- pend[pend$ArbstedKomm == zip & pend$value > 0, ]
   
-  # Finn hvilken rad det gjelder valgt kommune som også er bosted
+  # Finn hvilken rad det gjelder valgt kommune som ogsaa er bosted
   mat_komm <- match(zip, dat$Bokommuen)
   
   # Finn hvilken rad i kommune punkt data til valgt kommune
@@ -321,7 +320,7 @@ Filter_data_arb <- function(zip, n, adjA, scaleLine = FALSE, komm_punkt, pend, p
     topKom <- c(zip, topKom)[1:n+1]
   }
   
-  # sett valgt kommune øverst
+  # sett valgt kommune oeverst
   if (match(zip, topKom) != 1){
     m <- match(zip, topKom)
     topKom <- topKom[c(m, seq(1, n+1)[-m])]
@@ -342,11 +341,11 @@ Filter_data_arb <- function(zip, n, adjA, scaleLine = FALSE, komm_punkt, pend, p
   group <- rep(c("A", "B"), n)
   mylines <- data.frame(group = group, lat = lat, lng = lng, type = "line")
   
-  # sett bredde på linje (dette er fast akkurat nå)
+  # sett bredde paa linje (dette er fast akkurat naa)
   ww <- pmax(dat$value[mat_arb]/sum(dat$value[mat_arb]), 0.01) #bredde av linje
   if (scaleLine == FALSE) {ww <- rep(0.02, n)}
   
-  # sirkel størrelsen til sysselsatte som jobbe på valgt kommune
+  # sirkel stoerrelsen til sysselsatte som jobbe paa valgt kommune
   pop4 <- sqrt(dat$value[mat_arb]/max(pop_arb$value)) * adjA
   
   mat_tot_punkt <- match(topKom[2:(n+1)], komm_punkt$NR)
@@ -372,3 +371,4 @@ Add_popup <- function(komm_shape_fil, befolk, syss, pend){
   komm_shape_fil$perc <- round(komm_shape_fil$sysa/komm_shape_fil$sysb * 100, 1)
   return(komm_shape_fil)
 }
+
