@@ -1,6 +1,8 @@
 # pendling
 Visualisation of commute statistics. Based on Statistic Norway's StatBank table [03321](https://www.ssb.no/statbank/table/03321/)
 
+Application is hosted at: https://statisticsnorway.shinyapps.io/pendling/ 
+
 
 #### Structure
 Code for the application is found in this repository. It consists of a file called app.R containing the main code for the application and a file called Dotmap_Functions.R including additional functions used in the application. 
@@ -8,7 +10,10 @@ Code for the application is found in this repository. It consists of a file call
 Data used in the application is located in the data folder. While the tables could be accessed live through Statistic Norway's API we decided to include formatted data in the app for performance reasons. 
 
 #### Updating
-To update the application with new data:
+Note: Depending on the installation, I have had to run `Sys.setlocale('LC_ALL','nb_NO.UTF-8')` first before running the app locally to ensure the correct encoding is used.
+
+
+**To update the application with new data**:
 
 1. Open the R script file called make_data.R, included in the repository. This contains functions that can be used to update the application with new data. 
 2. Change the `years_all` object to the new year when data is available. 
