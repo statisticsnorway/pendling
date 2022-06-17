@@ -18,7 +18,7 @@ source("Dotmap_Functions.R")
 adjA <- 13000 # Factor for circle size adjustment
 adjL <- 100   # Factor for line size 
 antkom <- 20  # Number of possible connections
-years_all <- c("2017", "2018", "2019", "2020") # Possible selectable years
+years_all <- c("2017", "2018", "2019", "2020", "2021") # Possible selectable years
 
 circ_size <- list("Liten" = 16000, "Middels" = 24000, "Stor" = 64000)
 
