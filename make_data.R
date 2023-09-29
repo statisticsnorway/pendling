@@ -8,7 +8,7 @@
 #### 1. Setup ####
 # Load library for SSBs API
 library(PxWebApiData)
-library(rgdal)
+library(rgdal) # Being retired!!
 library(sf)
 library(sp)
 library(lubridate)
@@ -17,7 +17,7 @@ library(lubridate)
 source("Dotmap_Functions.R")
 
 # Specify which years to create data for
-years_all = "2021"
+years_all = "2022"
 
 
 
@@ -51,11 +51,14 @@ change_duplicates <- function(komm_punkt, year){
 shapeConverter <- function(year){
   yearfil <- year
   filnavn <- paste0("S:/Faglig/Kommunikasjon/Publisering/Kart/GISkartgrunnlag/_OLD/Illustrasjonskart", yearfil, ".gdb")
-  while (!file.exists(filnavn) & yearfil <= year(today()) + 1){
-    yearfil <- as.numeric(yearfil) + 1
+  while (!file.exists(filnavn) & yearfil >= 2017){
+    yearfil <- as.numeric(yearfil) - 1
     filnavn <- paste0("S:/Faglig/Kommunikasjon/Publisering/Kart/GISkartgrunnlag/_OLD/Illustrasjonskart", yearfil, ".gdb")
   }
-  if (!file.exists(filnavn)) stop("No kommune map file found")
+  if (!file.exists(filnavn)){
+    stop("No kommune map file found")
+    }
+  
   laynavn <- paste0("N5000_kommune_flate_", yearfil)
   komm_shape <- st_read(filnavn, layer = laynavn)
   komm_shape <- sf:::as_Spatial(komm_shape)
